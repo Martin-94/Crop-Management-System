@@ -1,12 +1,7 @@
-import { Routes, Route } from 'react-router-dom'
-import MainScreen from './pages/MainScreen'
+import MainScreen from "./pages/MainScreen";
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<MainScreen />} />
-    </Routes>
-  )
+  return <MainScreen />;
 }
 
-export default App
+export default App;

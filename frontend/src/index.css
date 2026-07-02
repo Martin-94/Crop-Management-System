@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Hide the default browser password reveal icon */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+/* Hide browser password icons in some browsers */
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-caps-lock-indicator {
+  display: none;
+  visibility: hidden;
+}

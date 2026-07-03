@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/cropelle-logo.png";
 
 function MainScreen() {
+  const navigate = useNavigate();
+
   return (
     <div
       style={{
@@ -10,8 +13,10 @@ function MainScreen() {
         justifyContent: "center",
         alignItems: "center",
         padding: "20px",
+        fontFamily: "Arial, sans-serif",
       }}
     >
+      {/* Device Frame */}
       {/* Tablet Frame */}
       <div
         style={{
@@ -47,6 +52,7 @@ function MainScreen() {
             height: "100%",
             border: "2px solid #333",
             overflow: "hidden",
+            backgroundColor: "#fff",
           }}
         >
           {/* Top Section */}
@@ -93,7 +99,9 @@ function MainScreen() {
               alignItems: "center",
               textAlign: "center",
               padding: "20px 40px",
-            }}
+              boxSizing: "border-box",
+
+           }}
           >
             <h2
               style={{
@@ -111,6 +119,8 @@ function MainScreen() {
                 fontSize: "16px",
                 fontWeight: "700",
                 lineHeight: "1.4",
+                margin: 0,
+
               }}
             >
               Your all-in-one web app for managing farm activities with ease.
@@ -138,9 +148,7 @@ function MainScreen() {
               }}
             >
               <button
-                onClick={() =>
-                  alert("Login functionality coming soon!")
-                }
+                onClick={() => alert("Login functionality coming soon!")}
                 style={{
                   width: "320px",
                   height: "90px",
@@ -156,9 +164,7 @@ function MainScreen() {
               </button>
 
               <button
-                onClick={() =>
-                  alert("Create Account functionality coming soon!")
-                }
+                onClick={() => navigate("/register")}
                 style={{
                   width: "320px",
                   height: "90px",

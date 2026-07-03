@@ -17,6 +17,7 @@ function MainScreen() {
       }}
     >
       {/* Device Frame */}
+      {/* Tablet Frame */}
       <div
         style={{
           width: "1000px",
@@ -99,7 +100,8 @@ function MainScreen() {
               textAlign: "center",
               padding: "20px 40px",
               boxSizing: "border-box",
-            }}
+
+           }}
           >
             <h2
               style={{
@@ -118,6 +120,7 @@ function MainScreen() {
                 fontWeight: "700",
                 lineHeight: "1.4",
                 margin: 0,
+
               }}
             >
               Your all-in-one web app for managing farm activities with ease.

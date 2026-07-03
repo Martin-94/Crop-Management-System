@@ -479,7 +479,7 @@ export default function RegistrationScreen() {
                 <button
                   type="button"
                   style={registerButtonStyle}
-                  onClick={() => alert("Register button clicked")}
+                  onClick={() => navigate("/login")}
                 >
                   REGISTER
                 </button>
@@ -491,3 +491,4 @@ export default function RegistrationScreen() {
     </div>
   );
 }
+

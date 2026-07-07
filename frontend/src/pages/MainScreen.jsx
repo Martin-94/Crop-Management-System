@@ -148,7 +148,7 @@ function MainScreen() {
               }}
             >
               <button
-                onClick={() => alert("Login functionality coming soon!")}
+                onClick={() => navigate("/login")}
                 style={{
                   width: "320px",
                   height: "90px",

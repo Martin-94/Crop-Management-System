@@ -7,6 +7,7 @@ import RegistrationScreen from "./pages/RegistrationScreen";
 import DashboardScreen from "./pages/DashboardScreen";
 import LoginScreen from "./pages/LoginScreen";
 
+
 function App() {
   return (
     // BrowserRouter enables routing throughout the application
@@ -30,11 +31,13 @@ function App() {
           element={<DashboardScreen />} 
         />
 
-         {/* Route for the user login screen */}
+        {/* Route for the user login screen */}
         <Route 
           path="/login" 
           element={<LoginScreen />} 
         />
+
+        
       </Routes>
     </BrowserRouter>
   );

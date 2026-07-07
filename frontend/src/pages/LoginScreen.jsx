@@ -20,11 +20,13 @@ export default function LoginScreen() {
           padding: "40px",
           borderRadius: "10px",
           textAlign: "center",
+          minWidth: "300px",
         }}
       >
         <h1>Login Screen</h1>
 
         <button
+          type="button"
           onClick={() => navigate("/dashboard")}
           style={{
             width: "200px",
@@ -43,4 +45,3 @@ export default function LoginScreen() {
     </div>
   );
 }
-

@@ -128,12 +128,6 @@ export default function DashboardScreen() {
     alignItems: "center",
   };
 
-  const logoutIconStyle = {
-    color: "#000",
-    fontSize: "56px",
-    fontWeight: "900",
-    lineHeight: "1",
-  };
 
   const welcomeStyle = {
     textAlign: "center",
@@ -333,8 +327,6 @@ const weatherDetailsStyle = {
                   <h2 style={cardTitleStyle}>CROPS</h2>
                 </div>
                     
-                    onClick={() => alert("Profile screen coming soon")}
-
                 <div style={cropsTextStyle}>
                   displays the crop that needs
                   <br />

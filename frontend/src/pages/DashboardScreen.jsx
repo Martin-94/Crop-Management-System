@@ -328,9 +328,11 @@ const weatherDetailsStyle = {
                 </div>
                     
                 <div style={cropsTextStyle}>
-                  displays the crop that needs
+                  Crop: Maize
                   <br />
-                  water immediately
+                  Water Level: Low
+                  <br />
+                  Irrigate Today
                 </div>
               </div>
 
@@ -348,9 +350,9 @@ const weatherDetailsStyle = {
 
                 <div style={weatherDetailsStyle}>
                   <div>
-                    24/06/2026
+                    {currentDate}
                     <br />
-                    Wednesday
+                    {currentDay}
                   </div>
 
                   <div>

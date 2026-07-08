@@ -112,3 +112,52 @@ Reinstall dependencies and restart the application:
 npm install
 npm run dev
 ```
+
+## 📂 Project Structure
+
+```text
+CROP-MANAGEMENT-SYSTEM/
+│
+├── frontend/
+│   ├── public/                    # Public static files
+│   │
+│   ├── src/
+│   │   ├── assets/                # Images, icons, and application resources
+│   │   ├── components/            # Reusable UI components
+│   │   │   └── Navbar.jsx
+│   │   │
+│   │   ├── pages/                 # Application screens
+│   │   │   ├── MainScreen.jsx
+│   │   │   ├── LoginScreen.jsx
+│   │   │   ├── RegistrationScreen.jsx
+│   │   │   ├── DashboardScreen.jsx
+│   │   │   └── NotificationsScreen.jsx
+│   │   │
+│   │   ├── App.jsx                # Main application component
+│   │   ├── App.css                # Application styles
+│   │   ├── index.css              # Global styles
+│   │   └── main.jsx               # Application entry point
+│   │
+│   ├── package.json               # Frontend dependencies and scripts
+│   ├── vite.config.js             # Vite configuration
+│   └── README.md
+│
+├── node_modules/                  # Installed project dependencies
+├── package.json                   # Project configuration
+├── package-lock.json              # Dependency lock file
+└── README.md                      # Project documentation
+```
+
+### Structure Overview
+
+| Folder/File | Description |
+|------------|-------------|
+| `assets/` | Contains images, icons, logos, and other static resources used throughout the application. |
+| `components/` | Stores reusable React components such as the navigation bar. |
+| `pages/` | Contains all major application screens including Login, Registration, Dashboard, and Notifications. |
+| `App.jsx` | Root component that controls the application layout and rendering. |
+| `main.jsx` | Entry point that mounts the React application. |
+| `App.css` & `index.css` | Application-specific and global styling files. |
+| `package.json` | Manages project dependencies and scripts. |
+| `vite.config.js` | Configuration file for the Vite development environment. |
+| `README.md` | Contains project documentation and setup instructions. |

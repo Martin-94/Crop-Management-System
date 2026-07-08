@@ -6,7 +6,7 @@ import MainScreen from "./pages/MainScreen";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import DashboardScreen from "./pages/DashboardScreen";
 import LoginScreen from "./pages/LoginScreen";
-
+import NotificationsScreen from "./pages/NotificationsScreen";
 
 function App() {
   return (
@@ -37,7 +37,11 @@ function App() {
           element={<LoginScreen />} 
         />
 
-        
+        {/* Route for the user notifications screen */}
+        <Route 
+          path="/notifications" 
+          element={<NotificationsScreen />} 
+        />
       </Routes>
     </BrowserRouter>
   );

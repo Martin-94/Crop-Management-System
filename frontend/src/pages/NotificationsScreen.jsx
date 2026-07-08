@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import homeIcon from "../assets/home.png";
@@ -10,6 +10,57 @@ import profileIcon from "../assets/profile.png";
 
 export default function NotificationsScreen() {
   const navigate = useNavigate();
+
+const [location, setLocation] = useState("Getting location...");
+
+useEffect(() => {
+  if (!navigator.geolocation) {
+    setLocation("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
+
+        const data = await response.json();
+
+        const city =
+          data.address?.city ||
+          data.address?.town ||
+          data.address?.village ||
+          data.address?.suburb ||
+          "";
+
+        const country = data.address?.country || "";
+
+        setLocation(
+          city && country
+            ? `${city}, ${country}`
+            : "Location unavailable"
+        );
+      } catch (error) {
+        console.error(error);
+        setLocation("Location unavailable");
+      }
+    },
+    (error) => {
+      console.error(error);
+      setLocation("Location unavailable");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  );
+}, []);
+
 
   const notifications = [
   "Weather alert: Heavy rain expected tomorrow.",
@@ -201,16 +252,34 @@ const homeIconStyle = {
             <div style={logoTextStyle}>CROPELLE</div>
 
             <div
-              style={menuItemStyle}
-              onClick={() => alert("Location screen coming soon")}
-            >
-              <img
-                src={locationIcon}
-                alt="Location"
-                style={menuIconStyle}
-              />
-              <span style={menuTextStyle}>LOCATION</span>
-            </div>
+                style={menuItemStyle}
+                onClick={() => alert("Location screen coming soon")}
+              >
+                <img
+                  src={locationIcon}
+                  alt="Location"
+                  style={menuIconStyle}
+                />
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span style={menuTextStyle}>LOCATION</span>
+
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      color: "#555",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {location}
+                  </span>
+                </div>
+              </div>
 
             <div style={menuItemStyle}>
               <img

@@ -1,3 +1,11 @@
+/*
+  app.js
+  - initialize Express application
+  - configure common middleware (JSON body parsing, CORS, security headers, logging)
+  - define a simple health-check route
+  - export the configured app for server startup and tests
+*/
+
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");

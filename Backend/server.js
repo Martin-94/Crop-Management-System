@@ -1,3 +1,10 @@
+/*
+  server.js
+  - load environment configuration
+  - import configured Express app from app.js
+  - start the HTTP server on the configured port
+*/
+
 require("dotenv").config();
 
 const app = require("./app");

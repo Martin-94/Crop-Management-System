@@ -1,3 +1,10 @@
+/*
+  config/db.js
+  - set up a PostgreSQL connection pool
+  - read database connection settings from environment variables
+  - expose the shared pool for database queries
+*/
+
 const { Pool } = require("pg");
 require("dotenv").config();
 

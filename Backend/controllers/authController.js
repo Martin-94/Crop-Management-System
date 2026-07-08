@@ -1,3 +1,11 @@
+/*
+  controllers/authController.js
+  - handle user authentication requests
+  - register: validate input, check existing user, hash password, save user
+  - login: validate input, verify credentials, sign JWT token
+  - send appropriate JSON responses for success and error cases
+*/
+
 const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

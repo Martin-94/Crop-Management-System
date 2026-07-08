@@ -1,3 +1,10 @@
+/*
+  middleware/auth.js
+  - verify JWT token from Authorization header
+  - reject requests without a valid token
+  - attach decoded user payload to req.user for protected routes
+*/
+
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {

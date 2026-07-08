@@ -15,6 +15,14 @@ import logoutIcon from "../assets/logout.png";
 export default function DashboardScreen() {
   const navigate = useNavigate();
 
+  const today = new Date();
+
+  const currentDate = today.toLocaleDateString("en-GB");
+
+  const currentDay = today.toLocaleDateString("en-GB", {
+    weekday: "long",
+  });
+
   const pageStyle = {
     minHeight: "100vh",
     backgroundColor: "#000",
@@ -99,20 +107,20 @@ export default function DashboardScreen() {
   };
 
   const menuTextStyle = {
-  fontSize: "20px",
-  fontWeight: "800",
-  color: "#000",
-  whiteSpace: "nowrap",
-};
+    fontSize: "20px",
+    fontWeight: "800",
+    color: "#000",
+    whiteSpace: "nowrap",
+  };
 
   const mainContentStyle = {
-  flex: 1,
-  width: "100%",
-  backgroundColor: "#fff",
-  padding: "28px 32px 34px 32px",
-  boxSizing: "border-box",
-  position: "relative",
-};
+    flex: 1,
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: "28px 32px 34px 32px",
+    boxSizing: "border-box",
+    position: "relative",
+  };
 
   const logoutButtonStyle = {
     position: "absolute",
@@ -128,7 +136,6 @@ export default function DashboardScreen() {
     alignItems: "center",
   };
 
-
   const welcomeStyle = {
     textAlign: "center",
     fontSize: "23px",
@@ -139,44 +146,45 @@ export default function DashboardScreen() {
     paddingRight: "105px",
   };
 
-const cardsGridStyle = {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gap: "16px",
-  width: "100%",
-};
+  const cardsGridStyle = {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+    width: "100%",
+  };
 
-const cardStyle = {
-  width: "100%",
-  minWidth: 0,
-  height: "230px",
-  backgroundColor: "#155f22",
-  color: "#fff",
-  padding: "20px",
-  boxSizing: "border-box",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-};
+  const cardStyle = {
+    width: "100%",
+    minWidth: 0,
+    height: "230px",
+    backgroundColor: "#155f22",
+    color: "#fff",
+    padding: "20px",
+    boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    cursor: "pointer",
+  };
 
-const cardTopRowStyle = {
-  display: "flex",
-  alignItems: "center",
-  gap: "20px",
-  height: "90px",
-};
+  const cardTopRowStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+    height: "90px",
+  };
 
-const cardIconStyle = {
-  width: "80px",
-  height: "80px",
-  objectFit: "contain",
-};
+  const cardIconStyle = {
+    width: "80px",
+    height: "80px",
+    objectFit: "contain",
+  };
 
-const weatherIconStyle = {
-  width: "80px",
-  height: "80px",
-  objectFit: "contain",
-};
+  const weatherIconStyle = {
+    width: "80px",
+    height: "80px",
+    objectFit: "contain",
+  };
 
   const cardTitleStyle = {
     fontSize: "36px",
@@ -186,31 +194,33 @@ const weatherIconStyle = {
   };
 
   const cropsTextStyle = {
-  fontSize: "18px",
-  fontWeight: "800",
-  textAlign: "center",
-  lineHeight: "1.15",
-  flex: 1,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-};
-const weatherDetailsStyle = {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  fontSize: "16px",
-  fontWeight: "800",
-  lineHeight: "1.6",
-  marginTop: "20px",
-};
+    fontSize: "18px",
+    fontWeight: "800",
+    textAlign: "center",
+    lineHeight: "1.15",
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const weatherDetailsStyle = {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    fontSize: "16px",
+    fontWeight: "800",
+    lineHeight: "1.6",
+    marginTop: "20px",
+  };
 
   const addCardTitleStyle = {
-  fontSize: "30px",
-  fontWeight: "900",
-  color: "#fff",
-  margin: 0,
-  lineHeight: "1.1",
-};
+    fontSize: "30px",
+    fontWeight: "900",
+    color: "#fff",
+    margin: 0,
+    lineHeight: "1.1",
+  };
+
   const moneyRowStyle = {
     display: "flex",
     alignItems: "center",
@@ -255,7 +265,7 @@ const weatherDetailsStyle = {
             {/* Notifications navigation item */}
             <div
               style={menuItemStyle}
-              onClick={() => alert("Notifications screen coming soon")}
+              onClick={() => navigate("/notifications")}
             >
               <img
                 src={notificationsIcon}
@@ -291,19 +301,19 @@ const weatherDetailsStyle = {
           <div style={mainContentStyle}>
             {/* Logout button */}
             <button
-                type="button"
-                style={logoutButtonStyle}
-                onClick={() => navigate("/")}
-                >
-                <img
-                    src={logoutIcon}
-                    alt="Logout"
-                    style={{
-                    width: "52px",
-                    height: "52px",
-                    objectFit: "contain",
-                    }}
-                />
+              type="button"
+              style={logoutButtonStyle}
+              onClick={() => navigate("/")}
+            >
+              <img
+                src={logoutIcon}
+                alt="Logout"
+                style={{
+                  width: "52px",
+                  height: "52px",
+                  objectFit: "contain",
+                }}
+              />
             </button>
 
             {/* Welcome message */}
@@ -320,13 +330,15 @@ const weatherDetailsStyle = {
             {/* Dashboard cards */}
             <div style={cardsGridStyle}>
               {/* Crops card */}
-              <div style={cardStyle}
-              onClick={() => alert("Crops screen coming soon")}>
+              <div
+                style={cardStyle}
+                onClick={() => alert("Crops screen coming soon")}
+              >
                 <div style={cardTopRowStyle}>
                   <img src={cropsIcon} alt="Crops" style={cardIconStyle} />
                   <h2 style={cardTitleStyle}>CROPS</h2>
                 </div>
-                    
+
                 <div style={cropsTextStyle}>
                   Crop: Maize
                   <br />
@@ -337,8 +349,10 @@ const weatherDetailsStyle = {
               </div>
 
               {/* Weather card */}
-              <div style={cardStyle}
-              onClick={() => alert("Weather screen coming soon")}>
+              <div
+                style={cardStyle}
+                onClick={() => alert("Weather screen coming soon")}
+              >
                 <div style={cardTopRowStyle}>
                   <img
                     src={weatherIcon}
@@ -364,8 +378,10 @@ const weatherDetailsStyle = {
               </div>
 
               {/* Add crops card */}
-              <div style={cardStyle}
-              onClick={() => alert("Add Crops screen coming soon")}>
+              <div
+                style={cardStyle}
+                onClick={() => alert("Add Crops screen coming soon")}
+              >
                 <div style={cardTopRowStyle}>
                   <img src={cropsIcon} alt="Add Crops" style={cardIconStyle} />
 
@@ -383,8 +399,10 @@ const weatherDetailsStyle = {
               </div>
 
               {/* Add expenses card */}
-              <div style={cardStyle}
-              onClick={() => alert("Add Expense screen coming soon")}>
+              <div
+                style={cardStyle}
+                onClick={() => alert("Add Expense screen coming soon")}
+              >
                 <div style={cardTopRowStyle}>
                   <img
                     src={expenseIcon}

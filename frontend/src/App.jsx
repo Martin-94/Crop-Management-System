@@ -8,6 +8,7 @@ import DashboardScreen from "./pages/DashboardScreen";
 import LoginScreen from "./pages/LoginScreen";
 import NotificationsScreen from "./pages/NotificationsScreen";
 import SettingsScreen from "./pages/SettingsScreen";
+import ProfileScreen from "./pages/ProfileScreen";
 
 function App() {
   return (
@@ -48,6 +49,12 @@ function App() {
         <Route 
           path="/settings" 
           element={<SettingsScreen />} 
+        />
+
+        {/* Route for the user profile screen */}
+        <Route 
+          path="/profile" 
+          element={<ProfileScreen />} 
         />
       </Routes>
     </BrowserRouter>

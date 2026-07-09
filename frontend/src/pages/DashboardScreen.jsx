@@ -354,12 +354,9 @@ useEffect(() => {
 
             {/* Profile navigation item */}
             <div
-              style={{
-                ...menuItemStyle,
-                marginBottom: 0,
-              }}
-              onClick={() => alert("Profile screen coming soon")}
-            >
+                style={menuItemStyle}
+                onClick={() => navigate("/profile")}
+              >
               <img src={profileIcon} alt="Profile" style={menuIconStyle} />
               <span style={menuTextStyle}>PROFILE</span>
             </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import cropelleLogo from "../assets/cropelle-logo.png";
@@ -22,6 +22,56 @@ export default function DashboardScreen() {
   const currentDay = today.toLocaleDateString("en-GB", {
     weekday: "long",
   });
+
+  const [location, setLocation] = useState("Getting location...");
+
+useEffect(() => {
+  if (!navigator.geolocation) {
+    setLocation("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
+
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
+
+        const data = await response.json();
+
+        const city =
+          data.address?.city ||
+          data.address?.town ||
+          data.address?.village ||
+          data.address?.suburb ||
+          "";
+
+        const country = data.address?.country || "";
+
+        setLocation(
+          city && country
+            ? `${city}, ${country}`
+            : "Location unavailable"
+        );
+      } catch (error) {
+        console.error("Reverse geocoding error:", error);
+        setLocation("Location unavailable");
+      }
+    },
+    (error) => {
+      console.error("Geolocation error:", error);
+      setLocation("Location unavailable");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  );
+}, []);
 
   const pageStyle = {
     minHeight: "100vh",
@@ -254,13 +304,27 @@ export default function DashboardScreen() {
             <div style={logoTextStyle}>CROPELLE</div>
 
             {/* Location navigation item */}
-            <div
-              style={menuItemStyle}
-              onClick={() => alert("Location screen coming soon")}
-            >
-              <img src={locationIcon} alt="Location" style={menuIconStyle} />
-              <span style={menuTextStyle}>LOCATION</span>
-            </div>
+            <div style={menuItemStyle}>
+                <img src={locationIcon} alt="Location" style={menuIconStyle} />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span style={menuTextStyle}>LOCATION</span>
+
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      color: "#555",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {location}
+                  </span>
+                </div>
+              </div>
 
             {/* Notifications navigation item */}
             <div
@@ -276,13 +340,17 @@ export default function DashboardScreen() {
             </div>
 
             {/* Settings navigation item */}
-            <div
-              style={menuItemStyle}
-              onClick={() => alert("Settings screen coming soon")}
-            >
-              <img src={settingsIcon} alt="Settings" style={menuIconStyle} />
-              <span style={menuTextStyle}>SETTINGS</span>
-            </div>
+              <div
+                style={menuItemStyle}
+                onClick={() => navigate("/settings")}
+              >
+                <img
+                  src={settingsIcon}
+                  alt="Settings"
+                  style={menuIconStyle}
+                />
+                <span style={menuTextStyle}>SETTINGS</span>
+              </div>
 
             {/* Profile navigation item */}
             <div

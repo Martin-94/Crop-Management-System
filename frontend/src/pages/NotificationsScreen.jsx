@@ -292,7 +292,7 @@ const homeIconStyle = {
 
             <div
               style={menuItemStyle}
-              onClick={() => alert("Settings screen coming soon")}
+              onClick={() => navigate("/settings")}
             >
               <img
                 src={settingsIcon}

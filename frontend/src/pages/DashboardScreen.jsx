@@ -340,13 +340,17 @@ useEffect(() => {
             </div>
 
             {/* Settings navigation item */}
-            <div
-              style={menuItemStyle}
-              onClick={() => alert("Settings screen coming soon")}
-            >
-              <img src={settingsIcon} alt="Settings" style={menuIconStyle} />
-              <span style={menuTextStyle}>SETTINGS</span>
-            </div>
+              <div
+                style={menuItemStyle}
+                onClick={() => navigate("/settings")}
+              >
+                <img
+                  src={settingsIcon}
+                  alt="Settings"
+                  style={menuIconStyle}
+                />
+                <span style={menuTextStyle}>SETTINGS</span>
+              </div>
 
             {/* Profile navigation item */}
             <div

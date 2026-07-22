@@ -9,6 +9,7 @@ import LoginScreen from "./pages/LoginScreen";
 import NotificationsScreen from "./pages/NotificationsScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 import ProfileScreen from "./pages/ProfileScreen";
+import WeatherScreen from "./pages/WeatherScreen";
 
 function App() {
   return (
@@ -56,6 +57,14 @@ function App() {
           path="/profile" 
           element={<ProfileScreen />} 
         />
+
+        {/* Route for the user weather screen */}
+        <Route 
+          path="/weather" 
+          element={<WeatherScreen />} 
+        />
+
+        
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/cropelle-logo.png";
+import useScreenSize from "../hooks/useScreenSize";
 
-function MainScreen() {
+const DEVICE_WIDTH_DESKTOP = "1180px";
+
+export default function MainScreen() {
   const navigate = useNavigate();
+
+  const { isPhone, isTablet, isDesktop } = useScreenSize();
 
   return (
     <div
@@ -12,25 +17,25 @@ function MainScreen() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "20px",
+        padding: isPhone ? "10px" : isTablet ? "15px" : "20px",
+        boxSizing: "border-box",
         fontFamily: "Arial, sans-serif",
       }}
     >
-      {/* Device Frame */}
-      {/* Tablet Frame */}
+      {/* DEVICE */}
       <div
         style={{
-          width: "1000px",
-          maxWidth: "95vw",
-          height: "680px",
+          width: "100%",
+          maxWidth: DEVICE_WIDTH_DESKTOP,
           backgroundColor: "#050505",
-          border: "3px solid #D6D6D6",
+          border: "3px solid #d6d6d6",
           borderRadius: "25px",
-          padding: "40px 50px",
+          padding: isPhone ? "10px" : isTablet ? "20px" : "35px",
           position: "relative",
+          boxSizing: "border-box",
         }}
       >
-        {/* Camera */}
+        {/* CAMERA */}
         <div
           style={{
             width: "14px",
@@ -45,69 +50,84 @@ function MainScreen() {
           }}
         />
 
-        {/* Screen */}
+        {/* SCREEN */}
         <div
           style={{
             width: "100%",
-            height: "100%",
-            border: "2px solid #333",
-            overflow: "hidden",
+            minHeight: isPhone ? "auto" : isTablet ? "650px" : "700px",
             backgroundColor: "#fff",
+            overflow: "hidden",
+            borderRadius: "12px",
           }}
         >
-          {/* Top Section */}
+          {/* TOP SECTION */}
           <div
             style={{
-              height: "48%",
-              backgroundColor: "#E9E5DC",
+              backgroundColor: "#e9e5dc",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
+              padding: isPhone
+                ? "25px 15px"
+                : isTablet
+                ? "40px 20px"
+                : "50px",
             }}
           >
             <img
               src={logo}
               alt="Cropelle Logo"
               style={{
-                width: "180px",
-                height: "180px",
-                objectFit: "contain",
+                width: isPhone
+                  ? "120px"
+                  : isTablet
+                  ? "150px"
+                  : "180px",
+                height: "auto",
               }}
             />
 
             <h1
               style={{
-                color: "#236B2A",
-                fontSize: "52px",
-                fontWeight: "bold",
+                color: "#236b2a",
+                fontSize: isPhone
+                  ? "36px"
+                  : isTablet
+                  ? "46px"
+                  : "56px",
+                fontWeight: "800",
                 marginTop: "10px",
-                marginBottom: "0",
+                marginBottom: 0,
               }}
             >
               CROPELLE
             </h1>
           </div>
 
-          {/* Bottom Section */}
+          {/* BOTTOM SECTION */}
           <div
             style={{
-              height: "52%",
-              backgroundColor: "#E7E7E7",
+              backgroundColor: "#e7e7e7",
+              textAlign: "center",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              textAlign: "center",
-              padding: "20px 40px",
-              boxSizing: "border-box",
-
-           }}
+              padding: isPhone
+                ? "25px 20px"
+                : isTablet
+                ? "35px 25px"
+                : "40px",
+            }}
           >
             <h2
               style={{
-                fontSize: "18px",
-                marginBottom: "10px",
-                fontWeight: "bold",
+                fontSize: isPhone
+                  ? "20px"
+                  : isTablet
+                  ? "24px"
+                  : "28px",
+                marginBottom: "15px",
               }}
             >
               🌱 Welcome to CROPELLE
@@ -116,25 +136,29 @@ function MainScreen() {
             <p
               style={{
                 maxWidth: "700px",
-                fontSize: "16px",
+                fontSize: isPhone
+                  ? "14px"
+                  : isTablet
+                  ? "16px"
+                  : "18px",
                 fontWeight: "700",
-                lineHeight: "1.4",
-                margin: 0,
-
+                lineHeight: "1.6",
               }}
             >
               Your all-in-one web app for managing farm activities with ease.
               Keep track of your crops, monitor livestock, and stay organized
-              with everything in one place, accessible anytime, from anywhere.
-              Whether you're planning, tracking, or reviewing progress, this
-              platform helps you stay in control of your farm operations.
+              with everything in one place.
             </p>
 
             <p
               style={{
                 marginTop: "15px",
-                fontSize: "16px",
-                fontWeight: "bold",
+                fontSize: isPhone
+                  ? "14px"
+                  : isTablet
+                  ? "16px"
+                  : "18px",
+                fontWeight: "700",
               }}
             >
               Log in to continue or create an account to get started.
@@ -142,21 +166,31 @@ function MainScreen() {
 
             <div
               style={{
-                marginTop: "auto",
+                marginTop: "30px",
                 display: "flex",
-                gap: "50px",
+                flexDirection: isPhone ? "column" : "row",
+                gap: "20px",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
               }}
             >
               <button
                 onClick={() => navigate("/login")}
                 style={{
-                  width: "320px",
-                  height: "90px",
-                  backgroundColor: "#236B2A",
+                  width: isPhone ? "100%" : "320px",
+                  maxWidth: "320px",
+                  height: isPhone ? "60px" : "70px",
+                  backgroundColor: "#236b2a",
                   color: "#fff",
                   border: "none",
-                  fontSize: "28px",
-                  fontWeight: "bold",
+                  borderRadius: "16px",
+                  fontSize: isPhone
+                    ? "20px"
+                    : isTablet
+                    ? "24px"
+                    : "28px",
+                  fontWeight: "800",
                   cursor: "pointer",
                 }}
               >
@@ -166,19 +200,23 @@ function MainScreen() {
               <button
                 onClick={() => navigate("/register")}
                 style={{
-                  width: "320px",
-                  height: "90px",
-                  backgroundColor: "#236B2A",
+                  width: isPhone ? "100%" : "320px",
+                  maxWidth: "320px",
+                  height: isPhone ? "60px" : "70px",
+                  backgroundColor: "#236b2a",
                   color: "#fff",
                   border: "none",
-                  fontSize: "22px",
-                  fontWeight: "bold",
+                  borderRadius: "16px",
+                  fontSize: isPhone
+                    ? "16px"
+                    : isTablet
+                    ? "20px"
+                    : "22px",
+                  fontWeight: "800",
                   cursor: "pointer",
                 }}
               >
-                CREATE AN
-                <br />
-                ACCOUNT
+                CREATE AN ACCOUNT
               </button>
             </div>
           </div>
@@ -187,5 +225,3 @@ function MainScreen() {
     </div>
   );
 }
-
-export default MainScreen;

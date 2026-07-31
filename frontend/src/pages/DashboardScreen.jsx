@@ -23,6 +23,10 @@ export default function DashboardScreen() {
 
   const [location, setLocation] = useState("Getting location...");
 
+  // Temporary username for welcome message
+  // Replace with actual login user later
+  const firstName = "User 1";
+
   const today = new Date();
 
   const currentDate = today.toLocaleDateString("en-GB");
@@ -31,51 +35,54 @@ export default function DashboardScreen() {
     weekday: "long",
   });
 
-  useEffect(() => {
-    if (!navigator.geolocation) {
-      setLocation("Geolocation not supported");
-      return;
-    }
+ useEffect(() => {
+  if (!navigator.geolocation) {
+    setLocation("Geolocation not supported");
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const { latitude, longitude } = position.coords;
 
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
 
-          const data = await response.json();
+        const data = await response.json();
 
-          const city =
-            data.address?.city ||
-            data.address?.town ||
-            data.address?.village ||
-            data.address?.suburb ||
-            "";
+        const city =
+          data.address?.city ||
+          data.address?.town ||
+          data.address?.village ||
+          data.address?.suburb ||
+          "";
 
-          const country = data.address?.country || "";
+        const country = data.address?.country || "";
 
-          setLocation(
-            city && country ? `${city}, ${country}` : "Location unavailable"
-          );
-        } catch (error) {
-          console.error("Reverse geocoding error:", error);
-          setLocation("Location unavailable");
-        }
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
+        setLocation(
+          city && country
+            ? `${city}, ${country}`
+            : "Location unavailable"
+        );
+      } catch (error) {
+        console.error("Reverse geocoding error:", error);
         setLocation("Location unavailable");
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
       }
-    );
-  }, []);
+    },
+    (error) => {
+      console.error("Geolocation error:", error);
+      setLocation("Location unavailable");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  );
+}, []);
+
 
   const pageStyle = {
   minHeight: "100vh",
@@ -560,11 +567,10 @@ export default function DashboardScreen() {
 
             {/* Welcome message */}
             <div style={welcomeStyle}>
-              Welcome back, username 👋
+              Welcome back, {firstName}! 👋
               <br />
-              Great to see you again. Your journey
-              <br />
-              starts here, take a look around and pick
+              Great to see you again. Your journey starts here,
+              <br /> take a look around and pick
               <br />
               up right where you left off.
             </div>

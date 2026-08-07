@@ -6,7 +6,12 @@ app.py
 """
 
 from flask import Flask
-from dotenv import load_dotenv
+
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover - fallback for environments without python-dotenv
+    def load_dotenv():
+        return False
 
 load_dotenv()
 from routes.auth_routes import auth_bp
@@ -34,3 +39,7 @@ app.register_blueprint(profile_bp, url_prefix="/api")
 @app.route("/")
 def health_check():
     return {"message": "Farm Management API Running"}
+
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)

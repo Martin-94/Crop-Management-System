@@ -6,7 +6,7 @@ class WeatherAPITests(unittest.TestCase):
         self.client = app.test_client()
 
     def test_weather_endpoint_returns_weather_data(self):
-        response = self.client.get("/api/weather?city=London")
+        response = self.client.get("/api/weather?city=Johanesburg")
 
         self.assertEqual(response.status_code, 200)
 

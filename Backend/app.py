@@ -6,6 +6,9 @@ app.py
 """
 
 from flask import Flask
+from dotenv import load_dotenv
+
+load_dotenv()
 from routes.auth_routes import auth_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.crop_routes import crop_bp

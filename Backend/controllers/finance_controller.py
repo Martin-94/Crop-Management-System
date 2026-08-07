@@ -5,26 +5,22 @@ controllers/finance_controller.py
 
 from flask import jsonify
 
+from database import get_income, get_expenses, get_finance_summary
+
 
 def get_income_expenses():
+    income = [dict(row) for row in get_income()]
+    expenses = [dict(row) for row in get_expenses()]
     return jsonify({
-        "message": "Income and expenses placeholder",
-        "income": [],
-        "expenses": [],
-        "totals": {
-            "income": 0,
-            "expenses": 0,
-            "balance": 0,
-        },
+        "message": "Income and expenses fetched successfully",
+        "income": income,
+        "expenses": expenses,
+        "totals": get_finance_summary(),
     })
 
 
 def get_finance_summary():
     return jsonify({
-        "message": "Finance summary placeholder",
-        "summary": {
-            "monthly_income": 0,
-            "monthly_expenses": 0,
-            "savings": 0,
-        },
+        "message": "Finance summary fetched successfully",
+        "summary": get_finance_summary(),
     })

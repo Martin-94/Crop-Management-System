@@ -32,7 +32,23 @@ Backend structure:
 - `Backend/routes/settingsRoutes.py` - settings endpoints
 - `Backend/routes/profileRoutes.py` - profile endpoints
 
-Available backend API routes Python Flask:
+## Database initialization
+
+The backend creates a local SQLite database file named `app_data.db` automatically when it starts. It also seeds sample data for:
+
+- users
+- profile
+- settings
+- crops
+- livestock
+- alerts
+- notifications
+- income
+- expenses
+
+## Available API routes
+
+The Flask backend exposes the following routes under `/api`:
 
 - `POST /api/register`
 - `POST /api/login`
@@ -51,5 +67,21 @@ Available backend API routes Python Flask:
 - `GET /api/profile`
 - `PUT /api/profile`
 
-> Protected routes require a valid JWT token in `Authorization: Bearer <token>` for the Python backend. The Python skeleton does not yet include authentication middleware as of yet.
+## Frontend integration notes
 
+- The backend now includes CORS headers for cross-origin frontend access.
+- The current authentication flow is basic and intended for development.
+- The backend returns persisted data for crops, livestock, alerts, notifications, settings, profile, and finance.
+
+## Running tests
+
+Use the unit test suite from the backend folder:
+
+```powershell
+cd "c:\Users\morra002\Documents\Intern Project\Crop-Management-System\Backend"
+python -m unittest
+```
+
+## Notes
+
+This repository is now focused on a Python/Flask backend.

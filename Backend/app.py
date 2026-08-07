@@ -14,6 +14,7 @@ except ImportError:  # pragma: no cover - fallback for environments without pyth
         return False
 
 load_dotenv()
+from database import init_db
 from routes.auth_routes import auth_bp
 from routes.dashboard_routes import dashboard_bp
 from routes.crop_routes import crop_bp
@@ -25,6 +26,17 @@ from routes.settings_routes import settings_bp
 from routes.profile_routes import profile_bp
 
 app = Flask(__name__)
+
+
+@app.after_request
+def apply_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return response
+
+
+init_db()
 
 app.register_blueprint(auth_bp, url_prefix="/api")
 app.register_blueprint(dashboard_bp, url_prefix="/api")

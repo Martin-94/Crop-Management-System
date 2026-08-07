@@ -5,34 +5,20 @@ controllers/alert_controller.py
 
 from flask import jsonify
 
+from database import get_alerts as db_get_alerts, get_notifications as db_get_notifications
+
 
 def get_alerts():
-    alerts = [
-        {
-            "id": 1,
-            "message": "Soil moisture is low in the north field.",
-            "timestamp": "2026-08-07T09:00:00Z",
-        },
-        {
-            "id": 2,
-            "message": "Pest activity detected near the greenhouse.",
-            "timestamp": "2026-08-07T08:30:00Z",
-        },
-    ]
-    return jsonify(alerts)
+    alerts = [dict(row) for row in db_get_alerts()]
+    return jsonify({
+        "message": "Alerts fetched successfully",
+        "alerts": alerts,
+    })
 
 
 def get_notifications():
-    notifications = [
-        {
-            "id": 1,
-            "message": "Watering reminder scheduled for today.",
-            "timestamp": "2026-08-07T07:45:00Z",
-        },
-        {
-            "id": 2,
-            "message": "Weather alert: strong winds expected this afternoon.",
-            "timestamp": "2026-08-07T06:15:00Z",
-        },
-    ]
-    return jsonify(notifications)
+    notifications = [dict(row) for row in db_get_notifications()]
+    return jsonify({
+        "message": "Notifications fetched successfully",
+        "notifications": notifications,
+    })

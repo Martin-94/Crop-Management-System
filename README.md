@@ -78,7 +78,7 @@ The Flask backend exposes the following routes under `/api`:
 Use the unit test suite from the backend folder:
 
 ```powershell
-cd "c:\Users\morra002\Documents\Intern Project\Crop-Management-System\Backend"
+cd "c:\ \ \ \Intern Project\Crop-Management-System\Backend"
 python -m unittest
 ```
 

@@ -25,7 +25,15 @@ export default function DashboardScreen() {
 
   // Temporary username for welcome message
   // Replace with actual login user later
-  const firstName = "User 1";
+const [firstName, setFirstName] = useState("User");
+
+useEffect(() => {
+  const savedUsername = localStorage.getItem("username");
+
+  if (savedUsername) {
+    setFirstName(savedUsername);
+  }
+}, []);
 
   const today = new Date();
 
@@ -549,10 +557,14 @@ export default function DashboardScreen() {
             {/* Desktop logout button */}
             {isDesktop && (
               <button
-                type="button"
-                style={logoutButtonStyle}
-                onClick={() => navigate("/")}
-              >
+                  type="button"
+                  style={logoutButtonStyle}
+                  onClick={() => {
+                    localStorage.removeItem("username");
+                    navigate("/");
+                  }}
+                >
+
                 <img
                   src={logoutIcon}
                   alt="Logout"

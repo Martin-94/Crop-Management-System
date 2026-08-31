@@ -6,6 +6,7 @@ import MainScreen from "./pages/MainScreen";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import DashboardScreen from "./pages/DashboardScreen";
 import LoginScreen from "./pages/LoginScreen";
+import ForgetPasswordScreen from "./pages/ForgetPassword";
 import NotificationsScreen from "./pages/NotificationsScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 import ProfileScreen from "./pages/ProfileScreen";
@@ -64,6 +65,12 @@ function App() {
           element={<WeatherScreen />} 
         />
 
+
+      {/* Route for the forget password screen */}
+        <Route 
+          path="/forget-password" 
+          element={<ForgetPasswordScreen />} 
+        />
         
       </Routes>
     </BrowserRouter>

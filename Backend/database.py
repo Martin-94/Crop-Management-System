@@ -60,14 +60,46 @@ def get_user_by_id(user_id: int):
     return query_one("SELECT * FROM users WHERE id = ?", (user_id,))
 
 
-def create_user(username: str, email: str, password: str):
+def create_user(
+    *,
+    name,
+    surname,
+    email,
+    username,
+    password,
+    farmType,
+    phoneNumber,
+    address,
+):
     password_hash = hash_password(password)
-    cursor = execute(
-        "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-        (username, email, password_hash),
-    )
-    return cursor.lastrowid
 
+    cursor = execute(
+        """
+        INSERT INTO users (
+            username,
+            email,
+            password_hash,
+            name,
+            surname,
+            farmType,
+            phoneNumber,
+            address
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            username,
+            email,
+            password_hash,
+            name,
+            surname,
+            farmType,
+            phoneNumber,
+            address,
+        ),
+    )
+
+    return cursor.lastrowid
 
 def get_profile(user_id: int):
     return query_one("SELECT * FROM profiles WHERE user_id = ?", (user_id,))
@@ -162,8 +194,20 @@ def init_db():
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, email TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL)"
-        )
+    """
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        name TEXT,
+        surname TEXT,
+        farmType TEXT,
+        phoneNumber TEXT,
+        address TEXT
+    )
+    """
+)
         cursor.execute(
             "CREATE TABLE IF NOT EXISTS profiles (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL, bio TEXT, location TEXT, FOREIGN KEY(user_id) REFERENCES users(id))"
         )
@@ -189,10 +233,22 @@ def init_db():
             "CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY, category TEXT NOT NULL, amount REAL NOT NULL, date TEXT NOT NULL)"
         )
 
+        
         if not cursor.execute("SELECT 1 FROM users LIMIT 1").fetchone():
-            user_id = create_user("farmer", "farmer@example.com", "password123")
-            update_profile(user_id, "Farm manager", "Nairobi")
-            update_settings(user_id, 1, "Africa/Nairobi")
+           user_id = create_user(
+                name="Demo",
+                surname="Farmer",
+                email="farmer@example.com",
+                username="farmer",
+                password="password123",
+                farmType="Mixed Farming",
+                phoneNumber="0000000000",
+                address="Demo Address",
+            )
+
+           update_profile(user_id, "Farm manager", "Nairobi")
+           update_settings(user_id, 1, "Africa/Nairobi")
+
 
         if not cursor.execute("SELECT 1 FROM crops LIMIT 1").fetchone():
             cursor.executemany(

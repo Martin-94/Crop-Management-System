@@ -10,7 +10,7 @@ export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (event) => {
+ const handleLogin = async (event) => {
   event.preventDefault();
 
   if (!username.trim() || !password.trim()) {
@@ -19,61 +19,44 @@ export default function LoginScreen() {
   }
 
   try {
-    /*
-    =====================================
-    FUTURE API LOGIN
-    =====================================
-
-    const response = await fetch(
-      "https://your-api-url/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      }
-    );
+    const response = await fetch("http://127.0.0.1:5000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    });
 
     const data = await response.json();
 
     if (response.ok) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", username);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      localStorage.setItem(
+        "username",
+        data.user.username
+      );
+
       navigate("/dashboard");
     } else {
-      alert(data.message || "Invalid username or password.");
+      alert(
+        data.message ||
+          "Invalid username or password."
+      );
     }
-
-    =====================================
-    END API LOGIN
-    =====================================
-    */
-
-    // TEMPORARY LOGIN
-    const validUsername = "admin";
-    const validPassword = "Password123";
-
-    if (
-      username === validUsername &&
-      password === validPassword
-    ) {
-
-      localStorage.setItem("username", username);
-      navigate("/dashboard");
-    } else {
-      alert("Invalid username or password.");
-    }
-
+  
   } catch (error) {
     console.error("Login Error:", error);
     alert("Login failed.");
   }
 };
-
+ 
   const handleForgotPassword = () => {
   navigate("/forget-password");
 };

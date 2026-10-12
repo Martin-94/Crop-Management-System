@@ -1,163 +1,87 @@
-# 🌱 Cropelle
+This branch contains a crop management system with a backend API server.
 
-A smart farming management platform designed to help small-scale farmers manage their farming activities through an easy-to-use and accessible digital solution.
+Root structure:
 
----
+- `package.json` - root project metadata and scripts
+- `README.md` - project documentation
+- `Backend/` - backend API server code and configuration
 
-## 📖 Overview
+Backend structure:
 
-Cropelle provides farmers with essential tools for managing crops, tracking farm finances, monitoring weather conditions, receiving alerts and notifications, and managing personal farm information. The platform is designed with simplicity in mind, making it accessible across mobile, tablet, and desktop devices.
+- `Backend/app.py` - configures Express middleware and route modules
+- `Backend/server.py` - loads environment variables and starts the server
+- `Backend/config/db.py` - creates and exports the PostgreSQL connection pool
+- `Backend/controllers/authController.py` - handles user registration and login logic
+- `Backend/controllers/dashboardController.py` - returns dashboard data for the app
+- `Backend/controllers/cropController.py` - exposes crop management endpoints
+- `Backend/controllers/livestockController.py` - exposes livestock management endpoints
+- `Backend/controllers/weatherController.py` - returns weather display data
+- `Backend/controllers/financeController.py` - returns income and expense data
+- `Backend/controllers/alertController.py` - returns alerts and notifications
+- `Backend/controllers/settingsController.py` - handles user settings payloads
+- `Backend/controllers/profileController.py` - handles user profile payloads
+- `Backend/middleware/auth.py` - validates JWT tokens for protected endpoints
+- `Backend/middleware/errorHandler.py` - central error handling middleware
+- `Backend/routes/authRoutes.py` - authentication routes for login and register
+- `Backend/routes/dashboardRoutes.py` - dashboard endpoint
+- `Backend/routes/cropRoutes.py` - crop management endpoints
+- `Backend/routes/livestockRoutes.py` - livestock endpoints
+- `Backend/routes/weatherRoutes.py` - weather display endpoint
+- `Backend/routes/financeRoutes.py` - income and expenses endpoints
+- `Backend/routes/alertRoutes.py` - alerts and notifications endpoints
+- `Backend/routes/settingsRoutes.py` - settings endpoints
+- `Backend/routes/profileRoutes.py` - profile endpoints
 
----
+## Database initialization
 
-## ✨ Features
+The backend creates a local SQLite database file named `app_data.db` automatically when it starts. It also seeds sample data for:
 
-✅ User registration, login, and password recovery
+- users
+- profile
+- settings
+- crops
+- livestock
+- alerts
+- notifications
+- income
+- expenses
 
-✅ Crop management and tracking
+## Available API routes
 
-✅ Farm finance management
+The Flask backend exposes the following routes under `/api`:
 
-✅ Real-time weather information and forecasts
+- `POST /api/register`
+- `POST /api/login`
+- `GET /api/dashboard`
+- `GET /api/crops`
+- `GET /api/crops/<id>`
+- `GET /api/livestock`
+- `GET /api/livestock/<id>`
+- `GET /api/weather`
+- `GET /api/finance`
+- `GET /api/finance/summary`
+- `GET /api/alerts`
+- `GET /api/notifications`
+- `GET /api/settings`
+- `PUT /api/settings`
+- `GET /api/profile`
+- `PUT /api/profile`
 
-✅ Alerts and notifications for important farming activities
+## Frontend integration notes
 
-✅ User profile management
+- The backend now includes CORS headers for cross-origin frontend access.
+- The current authentication flow is basic and intended for development.
+- The backend returns persisted data for crops, livestock, alerts, notifications, settings, profile, and finance.
 
-✅ Customizable settings and notification preferences
+## Running tests
 
-✅ Mobile-friendly and responsive design
+Use the unit test suite from the backend folder:
 
----
-
-## 🚀 Setup
-
-### Prerequisites
-
-Make sure the following are installed:
-
-- Node.js
-- npm
-- Git
-
-### Installation
-
-Clone the repository:
-
-```bash
-git clone <repository-url>
+```powershell
+cd "c:\ \ \ \Intern Project\Crop-Management-System\Backend"
+python -m unittest
 ```
 
-Navigate to the project folder:
+## Notes
 
-```bash
-cd cropelle
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Run the application:
-
-```bash
-npm run dev
-```
-
-The application will be available at:
-
-```text
-http://localhost:3000
-```
-
----
-
-## 🔧 Troubleshooting
-
-### Application won't start
-
-Verify Node.js and npm are installed:
-
-```bash
-node -v
-npm -v
-```
-
-### Dependencies fail to install
-
-```bash
-npm cache clean --force
-npm install
-```
-
-### Unable to connect to the backend
-
-- Ensure the backend server is running.
-- Verify API endpoints are configured correctly.
-- Check environment variables.
-
-### Weather data not loading
-
-- Check your internet connection.
-- Verify backend services are running correctly.
-- Ensure weather API configuration is valid.
-
-### Styling issues
-
-Reinstall dependencies and restart the application:
-
-```bash
-npm install
-npm run dev
-```
-
-## 📂 Project Structure
-
-```text
-CROP-MANAGEMENT-SYSTEM/
-│
-├── frontend/
-│   ├── public/                    # Public static files
-│   │
-│   ├── src/
-│   │   ├── assets/                # Images, icons, and application resources
-│   │   ├── components/            # Reusable UI components
-│   │   │   └── Navbar.jsx
-│   │   │
-│   │   ├── pages/                 # Application screens
-│   │   │   ├── MainScreen.jsx
-│   │   │   ├── LoginScreen.jsx
-│   │   │   ├── RegistrationScreen.jsx
-│   │   │   ├── DashboardScreen.jsx
-│   │   │   └── NotificationsScreen.jsx
-│   │   │
-│   │   ├── App.jsx                # Main application component
-│   │   ├── App.css                # Application styles
-│   │   ├── index.css              # Global styles
-│   │   └── main.jsx               # Application entry point
-│   │
-│   ├── package.json               # Frontend dependencies and scripts
-│   ├── vite.config.js             # Vite configuration
-│   └── README.md
-│
-├── node_modules/                  # Installed project dependencies
-├── package.json                   # Project configuration
-├── package-lock.json              # Dependency lock file
-└── README.md                      # Project documentation
-```
-
-### Structure Overview
-
-| Folder/File | Description |
-|------------|-------------|
-| `assets/` | Contains images, icons, logos, and other static resources used throughout the application. |
-| `components/` | Stores reusable React components such as the navigation bar. |
-| `pages/` | Contains all major application screens including Login, Registration, Dashboard, and Notifications. |
-| `App.jsx` | Root component that controls the application layout and rendering. |
-| `main.jsx` | Entry point that mounts the React application. |
-| `App.css` & `index.css` | Application-specific and global styling files. |
-| `package.json` | Manages project dependencies and scripts. |
-| `vite.config.js` | Configuration file for the Vite development environment. |
-| `README.md` | Contains project documentation and setup instructions. |
+This repository is now focused on a Python/Flask backend.

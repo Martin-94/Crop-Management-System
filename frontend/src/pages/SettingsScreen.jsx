@@ -24,19 +24,63 @@ export default function SettingsScreen() {
   const [offlineMode, setOfflineMode] = useState(false);
   const [lowDataUsage, setLowDataUsage] = useState(false);
 
-  useEffect(() => {
-    const savedSettings = localStorage.getItem("cropelleSettings");
+ useEffect(() => {
+  const loadSettings = async () => {
+    try {
+      const storedUser = JSON.parse(
+        localStorage.getItem("user") || "{}"
+      );
 
-    if (savedSettings) {
-      const settings = JSON.parse(savedSettings);
+      if (!storedUser.id) {
+        return;
+      }
 
-      setWeatherAlerts(settings.weatherAlerts ?? true);
-      setPestAlerts(settings.pestAlerts ?? true);
-      setWaterAlerts(settings.waterAlerts ?? true);
-      setOfflineMode(settings.offlineMode ?? false);
-      setLowDataUsage(settings.lowDataUsage ?? false);
+      const response = await fetch(
+        `http://127.0.0.1:5000/api/settings?userId=${storedUser.id}`
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Unable to load settings:",
+          data
+        );
+        return;
+      }
+
+      const settings = data.settings;
+
+      setWeatherAlerts(
+        settings.weatherAlerts ?? true
+      );
+      setPestAlerts(
+        settings.pestAlerts ?? true
+      );
+      setWaterAlerts(
+        settings.waterAlerts ?? true
+      );
+      setOfflineMode(
+        settings.offlineMode ?? false
+      );
+      setLowDataUsage(
+        settings.lowDataUsage ?? false
+      );
+
+      localStorage.setItem(
+        "cropelleSettings",
+        JSON.stringify(settings)
+      );
+    } catch (error) {
+      console.error(
+        "Load Settings Error:",
+        error
+      );
     }
-  }, []);
+  };
+
+  loadSettings();
+}, []);
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
@@ -94,8 +138,20 @@ export default function SettingsScreen() {
     );
   }, []);
 
-  const handleSave = () => {
+ const handleSave = async () => {
+  try {
+    const storedUser = JSON.parse(
+      localStorage.getItem("user") || "{}"
+    );
+
+    if (!storedUser.id) {
+      alert("Please log in again.");
+      navigate("/");
+      return;
+    }
+
     const settings = {
+      userId: storedUser.id,
       weatherAlerts,
       pestAlerts,
       waterAlerts,
@@ -103,9 +159,42 @@ export default function SettingsScreen() {
       lowDataUsage,
     };
 
-    localStorage.setItem("cropelleSettings", JSON.stringify(settings));
+    const response = await fetch(
+      "http://127.0.0.1:5000/api/settings",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settings),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(
+        data.message ||
+          data.error ||
+          "Unable to save settings."
+      );
+      return;
+    }
+
+    localStorage.setItem(
+      "cropelleSettings",
+      JSON.stringify(data.settings)
+    );
+
+    alert("Settings saved successfully.");
     navigate("/dashboard");
-  };
+  } catch (error) {
+    console.error("Save Settings Error:", error);
+    alert(
+      "Could not connect to the backend."
+    );
+  }
+};
 
   const handleCancel = () => {
     navigate("/dashboard");

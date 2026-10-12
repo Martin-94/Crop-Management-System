@@ -6,9 +6,11 @@ import MainScreen from "./pages/MainScreen";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import DashboardScreen from "./pages/DashboardScreen";
 import LoginScreen from "./pages/LoginScreen";
+import ForgetPasswordScreen from "./pages/ForgetPassword";
 import NotificationsScreen from "./pages/NotificationsScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 import ProfileScreen from "./pages/ProfileScreen";
+import WeatherScreen from "./pages/WeatherScreen";
 
 function App() {
   return (
@@ -56,6 +58,20 @@ function App() {
           path="/profile" 
           element={<ProfileScreen />} 
         />
+
+        {/* Route for the user weather screen */}
+        <Route 
+          path="/weather" 
+          element={<WeatherScreen />} 
+        />
+
+
+      {/* Route for the forget password screen */}
+        <Route 
+          path="/forget-password" 
+          element={<ForgetPasswordScreen />} 
+        />
+        
       </Routes>
     </BrowserRouter>
   );

@@ -9,10 +9,12 @@ import settingsIcon from "../assets/settings.png";
 import profileIcon from "../assets/profile.png";
 
 export default function ProfileScreen() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
   const [location, setLocation] = useState("Getting location...");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const isPhone = screenWidth <= 768;
   const isTablet = screenWidth > 768 && screenWidth <= 1024;
@@ -28,13 +30,24 @@ export default function ProfileScreen() {
     language: "",
   };
 
-  const [formData, setFormData] = useState(() => {
-    const savedProfile = localStorage.getItem("cropelleProfile");
-    return savedProfile ? JSON.parse(savedProfile) : emptyProfile;
-  });
+  const [formData, setFormData] = useState(emptyProfile);
+  const [savedProfile, setSavedProfile] = useState(emptyProfile);
+
+  const getLoggedInUser = () => {
+    try {
+      return JSON.parse(
+        localStorage.getItem("user") || "{}"
+      );
+    } catch (error) {
+      console.error("Stored user data is invalid:", error);
+      return {};
+    }
+  };
 
   useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
 
     window.addEventListener("resize", handleResize);
 
@@ -42,6 +55,59 @@ export default function ProfileScreen() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      const storedUser = getLoggedInUser();
+
+      if (!storedUser.id) {
+        alert("Please log in again.");
+        navigate("/");
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+
+        const response = await fetch(
+          `http://127.0.0.1:5000/api/profile?userId=${storedUser.id}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(
+            data.message ||
+              data.error ||
+              "Unable to load profile."
+          );
+          return;
+        }
+
+        const loadedProfile = {
+          name: data.profile.name || "",
+          surname: data.profile.surname || "",
+          farmName: data.profile.farmName || "",
+          phone: data.profile.phone || "",
+          address: data.profile.address || "",
+          cropType: data.profile.cropType || "",
+          language: data.profile.language || "",
+        };
+
+        setFormData(loadedProfile);
+        setSavedProfile(loadedProfile);
+      } catch (error) {
+        console.error("Load Profile Error:", error);
+        alert(
+          "Could not load the profile. Make sure the backend is running."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [navigate]);
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -70,7 +136,9 @@ export default function ProfileScreen() {
           const country = data.address?.country || "";
 
           setLocation(
-            city && country ? `${city}, ${country}` : "Location unavailable"
+            city && country
+              ? `${city}, ${country}`
+              : "Location unavailable"
           );
         } catch (error) {
           console.error("Reverse geocoding error:", error);
@@ -89,27 +157,90 @@ export default function ProfileScreen() {
     );
   }, []);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData((currentProfile) => ({
+      ...currentProfile,
+      [name]: value,
+    }));
   };
 
   const handleCancel = () => {
-    const saved = localStorage.getItem("cropelleProfile");
+    setFormData(savedProfile);
+  };
 
-    if (saved) {
-      setFormData(JSON.parse(saved));
-    } else {
-      setFormData(emptyProfile);
+  const handleSave = async () => {
+    const storedUser = getLoggedInUser();
+
+    if (!storedUser.id) {
+      alert("Please log in again.");
+      navigate("/");
+      return;
+    }
+
+    if (
+      !formData.name.trim() ||
+      !formData.surname.trim() ||
+      !formData.farmName.trim() ||
+      !formData.phone.trim() ||
+      !formData.address.trim() ||
+      !formData.cropType ||
+      !formData.language
+    ) {
+      alert("Please complete all profile fields.");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      const response = await fetch(
+        "http://127.0.0.1:5000/api/profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: storedUser.id,
+            name: formData.name.trim(),
+            surname: formData.surname.trim(),
+            farmName: formData.farmName.trim(),
+            phone: formData.phone.trim(),
+            address: formData.address.trim(),
+            cropType: formData.cropType,
+            language: formData.language,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(
+          data.message ||
+            data.error ||
+            "Unable to save profile."
+        );
+        return;
+      }
+
+      setFormData(data.profile);
+      setSavedProfile(data.profile);
+
+      alert("Profile saved successfully.");
+    } catch (error) {
+      console.error("Save Profile Error:", error);
+      alert(
+        "Could not save the profile. Make sure the backend is running."
+      );
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  const handleSave = () => {
-    localStorage.setItem("cropelleProfile", JSON.stringify(formData));
-    alert("Profile saved successfully");
-  };
+  
 
   const pageStyle = {
     minHeight: "100vh",
@@ -159,16 +290,16 @@ export default function ProfileScreen() {
   };
 
   const sidebarStyle = {
-    width: isTablet
-      ? "clamp(185px, 24vw, 220px)"
-      : "clamp(210px, 22vw, 280px)",
-    backgroundColor: "#f0ece3",
-    padding: isTablet ? "14px" : "clamp(14px, 2vw, 25px)",
-    boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "column",
-    flexShrink: 0,
-  };
+  width: isTablet
+      ? "clamp(220px, 28vw, 300px)"
+      : "clamp(240px, 25vw, 340px)",
+  backgroundColor: "#f0ece3",
+  padding: isTablet ? "14px" : "20px",
+  boxSizing: "border-box",
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: 0,
+};
 
   const logoStyle = {
     width: isTablet ? "78px" : "clamp(80px, 8vw, 145px)",
@@ -205,11 +336,11 @@ export default function ProfileScreen() {
   };
 
   const menuTextStyle = {
-    fontSize: isTablet ? "12px" : "clamp(14px, 2vw, 20px)",
-    fontWeight: "800",
-    color: "#000",
-    whiteSpace: "nowrap",
-  };
+  fontSize: isTablet ? "12px" : "clamp(14px, 1.8vw, 18px)",
+  fontWeight: "800",
+  color: "#000",
+  whiteSpace: "nowrap",
+};
 
   const sidebarLocationTextStyle = {
     fontSize: isTablet ? "10px" : "12px",
@@ -632,19 +763,25 @@ export default function ProfileScreen() {
               <div style={actionButtonContainerStyle}>
                 <button
                   type="button"
-                  style={actionButtonStyle}
+                  style={{
+                    ...actionButtonStyle,
+                    opacity: isSaving ? 0.7 : 1,
+                    cursor: isSaving ? "not-allowed" : "pointer",
+                  }}
                   onClick={handleSave}
+                  disabled={isSaving || isLoading}
                 >
-                  SAVE
+                  {isSaving ? "SAVING..." : "SAVE"}
                 </button>
 
                 <button
-                  type="button"
-                  style={actionButtonStyle}
-                  onClick={handleCancel}
-                >
-                  CANCEL
-                </button>
+                type="button"
+                style={actionButtonStyle}
+                onClick={handleCancel}
+                disabled={isSaving || isLoading}
+              >
+                CANCEL
+              </button>
               </div>
             </div>
 

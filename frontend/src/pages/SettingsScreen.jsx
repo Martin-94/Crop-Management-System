@@ -24,6 +24,14 @@ export default function SettingsScreen() {
   const [offlineMode, setOfflineMode] = useState(false);
   const [lowDataUsage, setLowDataUsage] = useState(false);
 
+  const [savedSettings, setSavedSettings] = useState({
+  weatherAlerts: true,
+  pestAlerts: true,
+  waterAlerts: true,
+  offlineMode: false,
+  lowDataUsage: false,
+});
+
  useEffect(() => {
   const loadSettings = async () => {
     try {
@@ -66,6 +74,14 @@ export default function SettingsScreen() {
       setLowDataUsage(
         settings.lowDataUsage ?? false
       );
+
+      setSavedSettings({
+  weatherAlerts: settings.weatherAlerts ?? true,
+  pestAlerts: settings.pestAlerts ?? true,
+  waterAlerts: settings.waterAlerts ?? true,
+  offlineMode: settings.offlineMode ?? false,
+  lowDataUsage: settings.lowDataUsage ?? false,
+});
 
       localStorage.setItem(
         "cropelleSettings",
@@ -186,6 +202,14 @@ export default function SettingsScreen() {
       JSON.stringify(data.settings)
     );
 
+    setSavedSettings({
+  weatherAlerts: data.settings.weatherAlerts,
+  pestAlerts: data.settings.pestAlerts,
+  waterAlerts: data.settings.waterAlerts,
+  offlineMode: data.settings.offlineMode,
+  lowDataUsage: data.settings.lowDataUsage,
+});
+
     alert("Settings saved successfully.");
     navigate("/dashboard");
   } catch (error) {
@@ -196,9 +220,13 @@ export default function SettingsScreen() {
   }
 };
 
-  const handleCancel = () => {
-    navigate("/dashboard");
-  };
+ const handleCancel = () => {
+  setWeatherAlerts(savedSettings.weatherAlerts);
+  setPestAlerts(savedSettings.pestAlerts);
+  setWaterAlerts(savedSettings.waterAlerts);
+  setOfflineMode(savedSettings.offlineMode);
+  setLowDataUsage(savedSettings.lowDataUsage);
+};
 
   const pageStyle = {
     minHeight: "100vh",

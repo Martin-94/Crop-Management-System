@@ -9,57 +9,58 @@ export default function ForgotPasswordScreen() {
 
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); 
 
-  const handleResetPassword = (event) => {
-    event.preventDefault();
+  const handleResetPassword = async (event) => {
+  event.preventDefault();
 
-    if (!email.trim()) {
-      alert("Please enter your email address.");
-      return;
-    }
+  if (!email.trim()) {
+    alert("Please enter your email address.");
+    return;
+  }
 
-    try {
-      /*
-      =====================================
-      FUTURE RESET PASSWORD API CALL
-      =====================================
+  if (!newPassword || !confirmPassword) {
+    alert("Please complete all fields.");
+    return;
+  }
 
-      const response = await fetch(
-        "https://your-api-url/forgot-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-          }),
-        }
-      );
+  if (newPassword !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setEmailSent(true);
-      } else {
-        alert(data.message || "Unable to send reset link.");
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:5000/api/forgot-password",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          newPassword: newPassword,
+        }),
       }
+    );
 
-      =====================================
-      END RESET PASSWORD API CALL
-      =====================================
-      */
+    const data = await response.json();
 
-      // TEMPORARY RESET PASSWORD LOGIC
-      console.log("Reset password requested for:", email);
-
+    if (response.ok) {
       setEmailSent(true);
-    } catch (error) {
-      console.error("Reset Password Error:", error);
-      alert("Unable to send the password reset link.");
+    } else {
+      alert(
+        data.message ||
+        "Unable to update password."
+      );
     }
-  };
-
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    alert("Unable to update the password.");
+  }
+};
+  
   const handleReturnToLogin = () => {
     navigate("/");
   };
@@ -89,8 +90,7 @@ export default function ForgotPasswordScreen() {
 
                   {/* TEXT BELOW EMAIL IMAGE */}
                   <p style={descriptionStyle}>
-                    Enter your email address and we will send you a password
-                    reset link.
+                    Enter your email address and create a new password for your account.
                   </p>
 
                   <form onSubmit={handleResetPassword}>
@@ -107,10 +107,35 @@ export default function ForgotPasswordScreen() {
                         required
                       />
                     </div>
+                    <div style={inputWrapperStyle}>
+                      <input
+                        type="password"
+                        placeholder="Enter new password"
+                        value={newPassword}
+                        onChange={(event) =>
+                          setNewPassword(event.target.value)
+                        }
+                        style={inputStyle}
+                        required
+                      />
+                    </div>
 
+                    <div style={inputWrapperStyle}>
+                      <input
+                        type="password"
+                        placeholder="Confirm new password"
+                        value={confirmPassword}
+                        onChange={(event) =>
+                          setConfirmPassword(event.target.value)
+                        }
+                        style={inputStyle}
+                        required
+                      />
+                    </div>
                     <button type="submit" style={resetButtonStyle}>
-                      SEND RESET LINK
+                      UPDATE PASSWORD
                     </button>
+                    
                   </form>
 
                   <button
@@ -127,18 +152,15 @@ export default function ForgotPasswordScreen() {
                     ✓
                   </div>
 
-                  <h3 style={successTitleStyle}>
-                    Email Sent Successfully
-                  </h3>
-
+                 
                   <p style={successTextStyle}>
-                    We sent a password reset link to:
+                    Password successfully updated for:
                   </p>
 
                   <p style={submittedEmailStyle}>{email}</p>
 
                   <p style={successTextStyle}>
-                    Please check your inbox and spam folder.
+                    You can now log in using your new password.
                   </p>
 
                   <button

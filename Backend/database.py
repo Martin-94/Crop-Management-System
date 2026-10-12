@@ -186,6 +186,14 @@ def get_dashboard_stats():
         "expenses_this_month": query_one("SELECT SUM(amount) AS total FROM expenses")["total"] or 0,
     }
 
+def update_user_password(email: str, password: str):
+    password_hash = hash_password(password)
+
+    return execute(
+        "UPDATE users SET password_hash = ? WHERE email = ?",
+        (password_hash, email),
+    )
+
 
 def init_db():
     if not os.path.exists(DB_PATH):

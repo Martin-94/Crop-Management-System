@@ -6,8 +6,22 @@ controllers/auth_controller.py
  
 from flask import request, jsonify
  
-from database import create_user, get_user_by_username, verify_password
-from validation import bad_request, unauthorized, validate_payload
+from flask import request, jsonify
+
+from database import (
+    create_user,
+    get_user_by_username,
+    get_user_by_email,
+    update_user_password,
+    verify_password,
+)
+
+from validation import (
+    bad_request,
+    unauthorized,
+    validate_payload,
+)
+
  
  
 def register():
@@ -75,4 +89,40 @@ def login():
         },
     })
  
- 
+def forgot_password():
+    payload = request.get_json(silent=True) or {}
+
+    valid, error = validate_payload(
+        ["email", "newPassword"],
+        payload,
+    )
+
+    if not valid:
+        return bad_request(error)
+
+    email = payload["email"].strip()
+    new_password = payload["newPassword"]
+
+    user = get_user_by_email(email)
+
+    if not user:
+        return bad_request(
+            "Email address not found"
+        )
+
+    if len(new_password) < 8:
+        return bad_request(
+            "Password must be at least 8 characters"
+        )
+
+    update_user_password(
+        email,
+        new_password,
+    )
+
+    return jsonify(
+        {
+            "message": "Password updated successfully",
+            "email": email,
+        }
+    ), 200

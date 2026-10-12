@@ -102,21 +102,96 @@ def create_user(
     return cursor.lastrowid
 
 def get_profile(user_id: int):
-    return query_one("SELECT * FROM profiles WHERE user_id = ?", (user_id,))
-
-
-def update_profile(user_id: int, bio: str | None, location: str | None):
-    profile = get_profile(user_id)
-    if profile:
-        return execute(
-            "UPDATE profiles SET bio = ?, location = ? WHERE user_id = ?",
-            (bio or profile["bio"], location or profile["location"], user_id),
-        )
-    return execute(
-        "INSERT INTO profiles (user_id, bio, location) VALUES (?, ?, ?)",
-        (user_id, bio or "", location or ""),
+    return query_one(
+        """
+        SELECT
+            u.id,
+            u.name,
+            u.surname,
+            u.phoneNumber,
+            u.address,
+            u.farmType,
+            COALESCE(p.farmName, '') AS farmName,
+            COALESCE(p.language, '') AS language,
+            COALESCE(p.location, '') AS location
+        FROM users AS u
+        LEFT JOIN profiles AS p
+            ON u.id = p.user_id
+        WHERE u.id = ?
+        """,
+        (user_id,),
     )
 
+
+def update_profile(
+    user_id: int,
+    name: str,
+    surname: str,
+    phone: str,
+    address: str,
+    crop_type: str,
+    farm_name: str,
+    language: str,
+):
+    execute(
+        """
+        UPDATE users
+        SET
+            name = ?,
+            surname = ?,
+            phoneNumber = ?,
+            address = ?,
+            farmType = ?
+        WHERE id = ?
+        """,
+        (
+            name,
+            surname,
+            phone,
+            address,
+            crop_type,
+            user_id,
+        ),
+    )
+
+    profile = query_one(
+        "SELECT user_id FROM profiles WHERE user_id = ?",
+        (user_id,),
+    )
+
+    if profile:
+        execute(
+            """
+            UPDATE profiles
+            SET
+                farmName = ?,
+                language = ?
+            WHERE user_id = ?
+            """,
+            (
+                farm_name,
+                language,
+                user_id,
+            ),
+        )
+    else:
+        execute(
+            """
+            INSERT INTO profiles (
+                user_id,
+                location,
+                farmName,
+                language
+            )
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                "",
+                farm_name,
+                language,
+            ),
+        )
 
 def get_settings(user_id: int):
     return query_one("SELECT * FROM settings WHERE user_id = ?", (user_id,))
@@ -259,12 +334,15 @@ def init_db():
             CREATE TABLE IF NOT EXISTS profiles (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL UNIQUE,
-                bio TEXT,
                 location TEXT,
+                farmName TEXT,
+                language TEXT,
                 FOREIGN KEY(user_id) REFERENCES users(id)
             )
             """
         )
+
+        
 
         # SETTINGS TABLE
         cursor.execute(
@@ -418,20 +496,22 @@ def init_db():
             user_id = cursor.lastrowid
 
             cursor.execute(
-                """
-                INSERT INTO profiles (
-                    user_id,
-                    bio,
-                    location
-                )
-                VALUES (?, ?, ?)
-                """,
-                (
-                    user_id,
-                    "Farm manager",
-                    "Nairobi",
-                ),
+            """
+            INSERT INTO profiles (
+                user_id,
+                location,
+                farmName,
+                language
             )
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                "Nairobi",
+                "Demo Farm",
+                "English",
+            ),
+        )
 
             cursor.execute(
                 """
